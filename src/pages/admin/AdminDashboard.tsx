@@ -195,9 +195,7 @@ export default function AdminDashboard() {
                         <td className="p-4">
                           <div className="flex items-center gap-2">
                             <User className="h-4 w-4 text-muted-foreground" />
-                            <span className="font-medium">
-                              {(pickup.profiles as any)?.name || "—"}
-                            </span>
+                            <span className="font-medium">{pickup.profiles?.name || "—"}</span>
                           </div>
                         </td>
                         <td className="p-4">
@@ -216,9 +214,7 @@ export default function AdminDashboard() {
                           </span>
                         </td>
                         <td className="p-4">
-                          <span className="text-sm">
-                            {(pickup.driver as any)?.name || "—"}
-                          </span>
+                          <span className="text-sm">{pickup.driver?.name || "—"}</span>
                         </td>
                         <td className="p-4">
                           <Badge className={getStatusColor(pickup.status)}>

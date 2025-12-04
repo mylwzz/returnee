@@ -5,6 +5,13 @@ import type { Database } from "@/integrations/supabase/types";
 type PickupStatus = Database["public"]["Enums"]["pickup_status"];
 type DropCarrier = Database["public"]["Enums"]["drop_carrier"];
 type CustodyEventType = Database["public"]["Enums"]["custody_event_type"];
+type ProfileSummary = Pick<Database["public"]["Tables"]["profiles"]["Row"], "name" | "email">;
+
+export type PickupWithRelations = Database["public"]["Tables"]["pickups"]["Row"] & {
+  profiles?: ProfileSummary | null;
+  driver?: ProfileSummary | null;
+  custody_events?: Database["public"]["Tables"]["custody_events"]["Row"][] | null;
+};
 
 // Validation schemas
 export const pickupCreateSchema = z.object({
@@ -79,7 +86,7 @@ export async function createPickup(input: PickupCreateInput, userId: string) {
 }
 
 // Get customer pickups
-export async function getCustomerPickups(userId: string) {
+export async function getCustomerPickups(userId: string): Promise<PickupWithRelations[]> {
   const { data, error } = await supabase
     .from("pickups")
     .select(`
@@ -90,11 +97,11 @@ export async function getCustomerPickups(userId: string) {
     .order("created_at", { ascending: false });
 
   if (error) throw error;
-  return data;
+  return (data ?? []) as PickupWithRelations[];
 }
 
 // Get single pickup
-export async function getPickup(pickupId: string) {
+export async function getPickup(pickupId: string): Promise<PickupWithRelations | null> {
   const { data, error } = await supabase
     .from("pickups")
     .select(`
@@ -106,7 +113,7 @@ export async function getPickup(pickupId: string) {
     .maybeSingle();
 
   if (error) throw error;
-  return data;
+  return (data as PickupWithRelations | null) ?? null;
 }
 
 // Update pickup status
@@ -152,7 +159,7 @@ export async function cancelPickup(pickupId: string, userId: string) {
 }
 
 // Get driver assigned pickups
-export async function getDriverPickups(driverId: string) {
+export async function getDriverPickups(driverId: string): Promise<PickupWithRelations[]> {
   const { data, error } = await supabase
     .from("pickups")
     .select(`
@@ -164,11 +171,11 @@ export async function getDriverPickups(driverId: string) {
     .order("window_start", { ascending: true });
 
   if (error) throw error;
-  return data;
+  return (data ?? []) as PickupWithRelations[];
 }
 
 // Get available pickups for drivers
-export async function getAvailablePickups() {
+export async function getAvailablePickups(): Promise<PickupWithRelations[]> {
   const { data, error } = await supabase
     .from("pickups")
     .select(`
@@ -180,7 +187,7 @@ export async function getAvailablePickups() {
     .order("window_start", { ascending: true });
 
   if (error) throw error;
-  return data;
+  return (data ?? []) as PickupWithRelations[];
 }
 
 // Driver claims a pickup
@@ -223,7 +230,7 @@ export async function addCustodyEvent(
 }
 
 // Get all pickups (admin)
-export async function getAllPickups(statusFilter?: string) {
+export async function getAllPickups(statusFilter?: string): Promise<PickupWithRelations[]> {
   let query = supabase
     .from("pickups")
     .select(`
@@ -239,5 +246,5 @@ export async function getAllPickups(statusFilter?: string) {
 
   const { data, error } = await query;
   if (error) throw error;
-  return data;
+  return (data ?? []) as PickupWithRelations[];
 }

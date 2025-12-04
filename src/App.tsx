@@ -10,6 +10,9 @@ import ReviewPickup from "./pages/ReviewPickup";
 import PickupConfirmation from "./pages/PickupConfirmation";
 import ActivePickup from "./pages/ActivePickup";
 import PickupReceipt from "./pages/PickupReceipt";
+import DriverDashboard from "./pages/driver/DriverDashboard";
+import DriverPickupDetail from "./pages/driver/DriverPickupDetail";
+import DriverApplication from "./pages/driver/DriverApplication";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +31,9 @@ const App = () => (
           <Route path="/pickup/:id/confirmation" element={<PickupConfirmation />} />
           <Route path="/pickup/:id" element={<ActivePickup />} />
           <Route path="/pickup/:id/receipt" element={<PickupReceipt />} />
+          <Route path="/driver" element={<DriverDashboard />} />
+          <Route path="/driver/pickup/:id" element={<DriverPickupDetail />} />
+          <Route path="/driver/apply" element={<DriverApplication />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -167,7 +167,7 @@ export default function DriverPickupDetail() {
           <CardContent className="space-y-4">
             <div>
               <p className="text-sm text-muted-foreground">Name</p>
-              <p className="font-medium">{(pickup.profiles as any)?.name || "Customer"}</p>
+              <p className="font-medium">{pickup.profiles?.name || "Customer"}</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Pickup Address</p>

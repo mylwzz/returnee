@@ -1,6 +1,6 @@
 export type PickupStatus = "scheduled" | "assigned" | "pickedUp" | "dropped" | "completed" | "cancelled";
 
-export type DropCarrier = "ups" | "fedex" | "usps" | "best";
+export type DropCarrier = "ups" | "fedex" | "usps" | "best" | "best_option";
 
 export interface ReturnArtifact {
   type: "file" | "qr";

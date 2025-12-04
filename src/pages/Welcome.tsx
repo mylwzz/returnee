@@ -17,6 +17,7 @@ export default function Welcome() {
     password: "",
     name: "",
   });
+  const [role, setRole] = useState<"customer" | "driver">("customer");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,11 +27,12 @@ export default function Welcome() {
       if (isLogin) {
         await mockApi.auth.login(formData.email, formData.password);
         toast.success("Welcome back!");
+        navigate(role === "driver" ? "/driver" : "/dashboard");
       } else {
         await mockApi.auth.signup(formData.email, formData.password, formData.name);
         toast.success("Account created successfully!");
+        navigate(role === "driver" ? "/driver/apply" : "/dashboard");
       }
-      navigate("/dashboard");
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     } finally {
@@ -62,6 +64,31 @@ export default function Welcome() {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            <div className="flex items-center gap-2 mb-4">
+              <Button
+                type="button"
+                variant={role === "customer" ? "default" : "outline"}
+                onClick={() => setRole("customer")}
+                className="flex-1"
+              >
+                I'm a customer
+              </Button>
+              <Button
+                type="button"
+                variant={role === "driver" ? "default" : "outline"}
+                onClick={() => setRole("driver")}
+                className="flex-1"
+              >
+                I'm a driver
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground mb-4">
+              Drivers can also jump straight to the{" "}
+              <Link to="/driver/apply" className="text-primary underline">
+                application flow
+              </Link>{" "}
+              and see the courier workflow.
+            </p>
             <form onSubmit={handleSubmit} className="space-y-4">
               {!isLogin && (
                 <div className="space-y-2">

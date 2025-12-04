@@ -64,6 +64,35 @@ This project is built with:
 
 Simply open [Lovable](https://lovable.dev/projects/0bc6ee96-634d-45df-8c0b-d78e87f53a05) and click on Share -> Publish.
 
+## Running locally with Supabase
+
+1. Copy `.env.local.example` to `.env.local` and fill in:
+   - `VITE_SUPABASE_URL` (Project Settings → API → Project URL)
+   - `VITE_SUPABASE_PUBLISHABLE_KEY` (API → anon/public key)
+2. Install dependencies: `npm install`
+3. Start dev server: `npm run dev`
+
+## Provisioning Supabase
+
+- Create a Supabase project, set a database password, and note the project ref.
+- Apply the schema from `supabase/migrations`:
+  ```bash
+  npm i -g supabase           # or brew install supabase/tap/supabase
+  supabase link --project-ref <your-project-ref>
+  supabase db push
+  ```
+  (Alternatively, paste the SQL from each file in `supabase/migrations` into the Supabase SQL Editor.)
+- Ensure email auth is enabled if you need sign-up/login (Authentication → Providers → Email).
+
+## Deploying on Vercel
+
+1. Import the repo into Vercel.
+2. Set environment variables in Project Settings → Environment Variables:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_PUBLISHABLE_KEY`
+3. Build command: `npm run build`; Output directory: `dist`.
+4. Deploy. If you use email auth, add your Vercel domain to Supabase Authentication → URL Configuration as an allowed redirect.
+
 ## Can I connect a custom domain to my Lovable project?
 
 Yes, you can!
